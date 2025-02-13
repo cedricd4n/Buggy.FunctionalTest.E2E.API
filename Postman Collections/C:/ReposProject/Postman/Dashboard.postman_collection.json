@@ -1,0 +1,225 @@
+{
+	"info": {
+		"_postman_id": "1f50d0c3-682c-4972-b447-cef35ecd3da0",
+		"name": "Dashboard",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "RequeteBeforeConnexion",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "35024769-9cf5-4ce6-a493-49f669d3a884",
+						"exec": [
+							"pm.test(\"verification du code 200 l'api dashboard sans connexion\", function () {\r",
+							"      pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Response time is within 500ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(1640);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"id": "e453084a-4931-41a9-9520-1b13c4722203",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": "{{url}}/dashboard"
+			},
+			"response": []
+		},
+		{
+			"name": "RequeteConnexion",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "896f4d97-fbbc-4905-aefe-1053fa191483",
+						"exec": [
+							"var jsonData= pm.response.json()\r",
+							"\r",
+							"pm.environment.set(\"access_token\",jsonData.access_token)\r",
+							"pm.environment.set(\"bearer\",jsonData.token_type)"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"id": "6254d601-257b-4881-89db-c62eeddb9eb0",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "origin",
+						"value": "https://buggy.justtestit.org",
+						"type": "text"
+					},
+					{
+						"key": "referer",
+						"value": "https://buggy.justtestit.org/",
+						"type": "text"
+					},
+					{
+						"key": "authority",
+						"value": "k51qryqov3.execute-api.ap-southeast-2.amazonaws.com",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "grant_type",
+							"value": "password",
+							"type": "text",
+							"uuid": "80be890b-8bdb-4f95-8741-e926d98c6820"
+						},
+						{
+							"key": "username",
+							"value": "Sed0rikku",
+							"type": "text",
+							"uuid": "80216a1f-e14b-4843-a679-f8d026289249"
+						},
+						{
+							"key": "password",
+							"value": "Password@123",
+							"type": "text",
+							"uuid": "3f961a4b-35e1-4de9-b9c9-9ceccbd6a669"
+						}
+					]
+				},
+				"url": "{{url}}/oauth/token"
+			},
+			"response": []
+		},
+		{
+			"name": "RequeteAfterConnexion",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "dde9babd-2db4-4ae1-8166-d6d50fea1408",
+						"exec": [
+							"pm.test(\"verification du code 200 l'api dashboard apres connexion\", function () {\r",
+							"      pm.response.to.have.status(200);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"id": "cba82ec0-5bd8-40ae-828e-7ffffc6065d9",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": {
+						"key": "authorization",
+						"value": "{{bearer}} {{access_token}}",
+						"in": "header"
+					}
+				},
+				"method": "GET",
+				"header": [],
+				"url": "{{url}}/dashboard"
+			},
+			"response": []
+		},
+		{
+			"name": "RequeteCurrent",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "38fc19e7-d869-405d-9488-a335a97a648f",
+						"exec": [
+							"pm.test(\"verification du code 200 l'api current\", function () {\r",
+							"    pm.expect(pm.response).to.have.status(200);\r",
+							"    \r",
+							"});\r",
+							"\r",
+							"pm.test(\"verification des donne de l'utilisateur\", function () {\r",
+							"    const responseData = pm.response.json(); \r",
+							"    pm.expect(responseData.lastName).to.eql(\"Testons\");\r",
+							"    \r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"id": "c3046a28-45ec-4b9f-9fec-cb1f53e30913",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": {
+						"value": "{{bearer}} {{access_token}}",
+						"key": "authorization",
+						"in": "header"
+					}
+				},
+				"method": "GET",
+				"header": [],
+				"url": "{{url}}/users/current"
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "apikey",
+		"apikey": {
+			"value": "{{bearer}} {{access_token}}",
+			"key": "authorization"
+		}
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "2c267b91-8aee-4f9a-964f-eb64b1ec3476",
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "839cc79b-9b97-45b9-a1f0-498a83debf7a",
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
